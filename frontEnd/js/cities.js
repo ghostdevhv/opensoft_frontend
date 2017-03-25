@@ -1,6 +1,4 @@
-
-
-var app = angular.module("Sample", []);
+var app = angular.module("Sample", ['angularModalService', 'ngAnimate','ngFileUpload','LocalStorageModule']);
 app.filter('searchFor', function(){
 	return function(arr, searchString){
 
@@ -24,35 +22,59 @@ app.filter('searchFor', function(){
 
 });
 
-app.controller('imagesController', function($scope) {
-  $scope.image = [{
-    src: 'upload.jpg',
-  }];
-});
-app.controller("mapMarker",function($scope){
-  $scope.aa  = function(i){
-    markers.clearMarkers();
-    markers.addMarker(new OpenLayers.Marker(new OpenLayers.LonLat(i.lon,i.lat).transform(fromProjection, toProjection)));
-    map.setCenter(new OpenLayers.LonLat(i.lon,i.lat).transform(fromProjection, toProjection), 10 );
-    $scope.searchString = "";
-  }
-});
+app.controller( "InstantSearchController", ['$scope', 'ModalService','$timeout','$http','localStorageService', function($scope, ModalService, $timeout,$http,localStorageService){
 
-app.controller( "InstantSearchController",function($scope){
-  $scope.upload = function(){
-    alert("Clicked");
-  }
-  $scope.delete = function(){
-    alert ("Going to delete");
-  }
-$scope.items = {
-  "adak": {
+    $scope.upload = function(){
+        console.log("Upload");
+
+        ModalService.showModal({
+        templateUrl: "upload-modal.html",
+        controller: "uploadmodalController",
+        inputs: {
+            title: "Upload an Image"
+        }
+        }).then(function(modal) {
+            modal.element.modal();
+            modal.close.then(function(result) {
+                console.log("Chal gya Upload wala part");
+            });
+        });
+
+    }
+    $scope.delete = function(){
+        console.log("Delete");
+
+        ModalService.showModal({
+        templateUrl: "delete-modal.html",
+        controller: "deletemodalController",
+        inputs: {
+            title: "Delete an Image"
+        }
+        }).then(function(modal) {
+            modal.element.modal();
+            modal.close.then(function(result) {
+                console.log("Chal gya Delete wala part");
+            });
+        });
+    }
+    
+    $scope.aa  = function(i){
+        markers.clearMarkers();
+        markers.addMarker(new OpenLayers.Marker(new OpenLayers.LonLat(i.lon,i.lat).transform(fromProjection, toProjection)));
+        map.setCenter(new OpenLayers.LonLat(i.lon,i.lat).transform(fromProjection, toProjection), 10 );
+        $scope.searchString = "";
+
+
+    }
+
+    $scope.items = {
+    "adak": {
     "lat": 51.883,
     "lon": -176.633,
     "wikipedia": "Adak,_Alaska",
     "city": "Adak"
-  },
-  "apia": {
+    },
+    "apia": {
     "lat": -13.833,
     "lon": -171.833,
     "wikipedia": "Apia",
@@ -4008,4 +4030,4 @@ $scope.items = {
   }
 
 };
-});
+}]);

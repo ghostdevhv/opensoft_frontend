@@ -1,0 +1,54 @@
+<div class="modal fade" role="dialog">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title" style="text-align:center;"> Delete Image(s) </h4>
+            </div>
+            <div class="modal-body">
+                <div class="content">
+                    <form>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label style="font-weight:lighter; font-size: 13px;">SELECT A TAG</label>
+                                    <select class="form-control" ng-model="upload_tag">
+                                        <option value="" selected disabled>Select a tag</option>
+                                        <option ng-repeat="x in upload_choices">{{ x }}</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-md-6" ng-show="upload_tag == 'Other'">
+                                <div class="form-group">
+                                    <label style="font-weight:lighter; font-size: 13px;">CUSTOM_TAG</label>
+                                    <input type="text" class="form-control" placeholder="Provide a tag" ng-model="upload_custom_tag">
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-5">
+                                <div class="form-group">
+                                    <label style="font-weight:lighter; font-size: 13px;">UPLOAD IMAGE</label>
+                                    <input type="file" accept="image/*" file-model="myFile"/>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="form-group">
+                                    <label style="font-weight:lighter; font-size: 13px;">LOCATION</label>
+                                    <input type="text" class="form-control" placeholder="e.g. LBS Hall of Residence" ng-model="upload_location">
+                                </div>
+                            </div>
+                        </div>
+
+                        <button type="submit" class="btn btn-info btn-fill" ng-click="upload_done()" data-dismiss="modal" style="display:block;margin: 0 auto; width:200px;">Delete</button>
+                        <div class="clearfix"></div>
+                    </form>
+                </div> 
+            </div>
+        </div>
+    </div>
+</div> 
