@@ -1,24 +1,24 @@
 var app = angular.module("Sample", ['angularModalService', 'ngAnimate','ngFileUpload','LocalStorageModule']);
 app.filter('searchFor', function(){
-	return function(arr, searchString){
+  return function(arr, searchString){
 
-		if(!searchString){
-			return null;
-		}
+    if(!searchString){
+      return null;
+    }
 
-		var result = [];
+    var result = [];
 
-		searchString = searchString.toLowerCase();
-		angular.forEach(arr, function(item){
+    searchString = searchString.toLowerCase();
+    angular.forEach(arr, function(item){
 
-			if(item.city.toLowerCase().indexOf(searchString) !== -1){
-				result.push(item);
-			}
+      if(item.city.toLowerCase().indexOf(searchString) !== -1){
+        result.push(item);
+      }
 
-		});
+    });
 
-		return result;
-	};
+    return result;
+  };
 
 });
 
@@ -58,14 +58,20 @@ app.controller( "InstantSearchController", ['$scope', 'ModalService','$timeout',
         });
     }
     
-    $scope.aa  = function(i){
-        markers.clearMarkers();
-        markers.addMarker(new OpenLayers.Marker(new OpenLayers.LonLat(i.lon,i.lat).transform(fromProjection, toProjection)));
-        map.setCenter(new OpenLayers.LonLat(i.lon,i.lat).transform(fromProjection, toProjection), 10 );
-        $scope.searchString = "";
+    $scope.mapMark = function(i) {
+    
+    var lonlat = new OpenLayers.LonLat(i.lon, i.lat).transform(
+        new OpenLayers.Projection("EPSG:4326"), // transform from WGS 1984
+        new OpenLayers.Projection("EPSG:900913") // to Spherical Mercator
+        );
+    markers.clearMarkers();
+    markers.addMarker(new OpenLayers.Marker(lonlat));
+    map.setCenter(lonlat, 11 );
 
+  
 
-    }
+    $scope.searchString = "";
+  }
 
     $scope.items = {
     "adak": {
