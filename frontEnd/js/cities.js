@@ -1,25 +1,19 @@
 var app = angular.module("Sample", ['angularModalService', 'ngAnimate','ngFileUpload','LocalStorageModule']);
+
 app.filter('searchFor', function(){
-  return function(arr, searchString){
-
-    if(!searchString){
-      return null;
-    }
-
-    var result = [];
-
-    searchString = searchString.toLowerCase();
-    angular.forEach(arr, function(item){
-
-      if(item.city.toLowerCase().indexOf(searchString) !== -1){
-        result.push(item);
-      }
-
-    });
-
-    return result;
-  };
-
+    return function(arr, searchString){
+        if(!searchString){
+            return null;
+        }
+        var result = [];
+        searchString = searchString.toLowerCase();
+        angular.forEach(arr, function(item){
+            if(item.city.toLowerCase().indexOf(searchString) !== -1){
+                result.push(item);
+            }
+        });
+        return result;
+    };
 });
 
 app.controller( "InstantSearchController", ['$scope', 'ModalService','$timeout','$http','localStorageService', function($scope, ModalService, $timeout,$http,localStorageService){
@@ -59,19 +53,35 @@ app.controller( "InstantSearchController", ['$scope', 'ModalService','$timeout',
     }
     
     $scope.mapMark = function(i) {
-    
-    var lonlat = new OpenLayers.LonLat(i.lon, i.lat).transform(
-        new OpenLayers.Projection("EPSG:4326"), // transform from WGS 1984
-        new OpenLayers.Projection("EPSG:900913") // to Spherical Mercator
+        
+        var lonlat = new OpenLayers.LonLat(i.lon, i.lat).transform(
+            new OpenLayers.Projection("EPSG:4326"), // transform from WGS 1984
+            new OpenLayers.Projection("EPSG:900913") // to Spherical Mercator
         );
-    markers.clearMarkers();
-    markers.addMarker(new OpenLayers.Marker(lonlat));
-    map.setCenter(lonlat, 11 );
+        markers.clearMarkers();
+        markers.addMarker(new OpenLayers.Marker(lonlat));
+        map.setCenter(lonlat, 11 );
 
-  
+        $scope.searchString = "";
 
-    $scope.searchString = "";
-  }
+        console.log(i.city);
+
+        ModalService.showModal({
+        templateUrl: "tag_pic.html",
+        controller: "tagmodalController",
+        inputs: {
+            title: i.city
+        }
+        }).then(function(modal) {
+            modal.element.modal();
+            modal.close.then(function(result) {
+                console.log("Chal gya tag wala part");
+            });
+        });
+
+
+        
+    }
 
     $scope.items = {
     "adak": {
